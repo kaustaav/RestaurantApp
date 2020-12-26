@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const morgan = require('morgan');
 const passport = require('passport');
 const path = require('path');
 
@@ -9,6 +10,7 @@ const users = require('./routes/api/users');
 const restaurants = require('./routes/api/restaurants');
 
 const app = express();
+const port = process.env.PORT || 5000;
 
 app.use(
     bodyParser.urlencoded({
@@ -48,14 +50,13 @@ if(process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
 }
 
+app.use(morgan('tiny'));
+
 app.use(passport.initialize());
 
 require('./config/passport')(passport);
 
 app.use('/api/users', users);
 app.use('/api/restaurants', restaurants);
-
-
-const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
