@@ -1,0 +1,92 @@
+.primary-content-area {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    max-width: 1300px;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: calc(100vh - 30px);
+}
+
+.primary-content-wrap {
+    padding-top: 75px;
+}
+
+.primary-content-wrap section {
+    padding-bottom: 20px;
+}
+
+.ads-section {
+    margin-left: auto;
+    margin-right: auto;
+    /* max-width: 885px; */
+}
+
+.ads-section a {
+    display: block;
+    background-color: white !important;
+    transition: all 0.7s ease;
+}
+
+.ads-section a:hover {
+    opacity: 0.9;
+    transition: all 0.7s ease;
+}
+
+.carousel .slide {
+    background: #fff;
+}
+
+.carousel .slide img {
+    max-height: 388px;
+    min-height: 200px;
+    height: 43vw;
+    width: 100%;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+}
+
+.carousel .slide img:hover {
+    opacity: 0.3 !important;
+}
+
+.carousel .slider-wrapper.axis-horizontal .slider,
+.carousel.carousel-slider {
+    height: max-content;
+}
+
+.carousel .slider-wrapper.axis-horizontal .slider, .carousel.carousel-slider {
+    border-radius: 4px;
+}
+
+.Carousel>a {
+    height: auto;
+    height: max-content !important;
+}
+
+.Carousel>a>img {
+    cursor: pointer;
+}
+
+.Carousel>a>img:hover {
+    opacity: 0.3 !important;
+}
+
+.ads-section button.control-arrow::before {
+    transition: all 0.3s ease-in;
+}
+
+.ads-section button.control-arrow:hover::before {
+    transform: scale(1.3);
+    -webkit-transform: scale(1.3);
+    transition: all 0.3s ease-out;
+}
+
+@media (max-width: 450px) {
+    .primary-content-area {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}

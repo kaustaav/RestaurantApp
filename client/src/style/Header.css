@@ -1,0 +1,73 @@
+.header {
+    position: fixed;
+    /* top: 0; */
+    width: 100%;
+    z-index: 100;
+}
+
+.header .main-header {
+    display: flex;
+    background: #222;
+    color: #fff;
+}
+
+.main-header .header-title {
+    width: 30%;
+    padding: 10px;
+}
+
+.main-header .header-title a {
+    font-family: cursive;
+    color: #fff !important;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.main-header .header-title a span {
+    color: #5383d3;
+}
+
+.main-header .header-bar {
+    width: 70%;
+}
+
+.main-header .header-bar .header-options {
+    display: flex;
+}
+
+.main-header .header-bar .header-options .header-option {
+    width: 33%;
+    position: relative;
+    /* margin: 0 auto; */
+    text-align: center;
+    padding: 13px 5px 0px 5px;
+}
+
+.main-header .header-bar .header-options .header-option a {
+    position: relative;
+    display: block;
+    color: #fff;
+}
+
+.main-header .header-bar .header-cart a .cart-count {
+    position: absolute;
+    left: calc(50% + 6px);
+    top: -12px;
+    width: 25px;
+    height: 25px;
+    background: #ff9800;
+    border-radius: 50%;
+}
+
+.main-header .header-bar .header-cart a .cart-total {
+    position: absolute;
+    top: 10px;
+    left: calc(50% + 9px);
+}
+
+.main-header .header-bar .header-edit_item a i {
+    position: absolute;
+    left: calc(50% + 30px);
+    top: -8px;
+    color: #ff9800;
+}

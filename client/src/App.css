@@ -1,0 +1,14 @@
+body {
+    box-sizing: border-box;
+    background: #fafafa;
+}
+
+input[type="radio"] {
+    position: relative !important;
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+
+a {
+    cursor: pointer;
+}
