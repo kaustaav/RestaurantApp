@@ -40,6 +40,14 @@ mongoose
     .then(() => console.log('MongoDB successfully connected'))
     .catch(err => console.log(err));
 
+mongoose.connection.on('connected', () => {
+    console.log('Mongoose is connected');
+})
+
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+}
+
 app.use(passport.initialize());
 
 require('./config/passport')(passport);
@@ -47,12 +55,6 @@ require('./config/passport')(passport);
 app.use('/api/users', users);
 app.use('/api/restaurants', restaurants);
 
-// Serve our static assets if in production
-
-app.use(express.static(path.join(__dirname, '../build')))
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build'))
-})
 
 const port = process.env.PORT || 5000;
 
