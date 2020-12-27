@@ -1,5 +1,7 @@
 const { CLIENT_ORIGIN } = require('../config/keys');
 
+// mail templates
+
 module.exports = {
     confirm: (id, type) => ({
         subject: 'React Confirm Email',

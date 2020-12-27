@@ -11,12 +11,18 @@ const Restaurant = require('../../models/Restaurant');
 const msgs = require('../../email/msgs');
 const sendEmail = require('../../email/send');
 const templates = require('../../email/templates');
-// const crypto = require('crypto');
 const User = require('../../models/User');
 const VerifyToken = require('../../validation/VerifyToken');
 
+// Route for restaurants
+// all apis connected to restaurants are in this file
+
+// for registration of restaurants
+
 router.post('/register', (req,res) => {
     const {errors, isValid} = validateRestaurantRegisterInput(req.body);
+
+    // lets in only if inputs fields are valid
 
     if(!isValid) {
         return res.status(400).json(errors);
@@ -24,6 +30,9 @@ router.post('/register', (req,res) => {
     
     Restaurant.findOne({ email: req.body.email }).then(restaurant => {
         if(!restaurant) {
+            // if account doesn't already exists
+            // create new account
+
             const newRestaurant = new Restaurant({
                 name: req.body.name,
                 email: req.body.email,
@@ -32,6 +41,9 @@ router.post('/register', (req,res) => {
                 contact_no: req.body.contact_no
             })
 
+            // generates encrypted password 
+            // so that admins can't see sensitive data
+
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newRestaurant.password, salt, (err,hash) => {
                     if(err) throw err;
@@ -39,6 +51,8 @@ router.post('/register', (req,res) => {
                     newRestaurant
                         .save()
                         .then(restaurant => {
+                            // sends confirmation mail if successful
+
                             sendEmail(restaurant.email, templates.confirm(restaurant._id, 'restaurants'));
                             res.json({msg: msgs.confirm});
                         })
@@ -47,9 +61,16 @@ router.post('/register', (req,res) => {
             });
         }
         else if(restaurant && restaurant.verified) {
-            return res.status(400).json({ msg: msgs.alreadyConfirmed });
+            // if account with this email id exists
+            // doesn't create another account
+            // and shows error
+
+            return res.status(400).json({ email: 'Email already exists' });
         }
         else if(restaurant && !restaurant.verified) {
+            // if account exists but it is not verified 
+            // then resends confirmation mail
+
             sendEmail(restaurant.email, templates.confirm(restaurant._id, 'restaurants'))
                 .then(() => res.json({ msg: msgs.resend }))
                 .catch(err => console.log(err));
@@ -57,8 +78,12 @@ router.post('/register', (req,res) => {
     })
 })
 
+// when restaurant hits login 
+
 router.post('/login', (req,res) => {
     const { errors, isValid } = validateLoginInput(req.body);
+
+    // doesn't let in if input is invalid
 
     if(!isValid) {
         return res.status(400).json(errors);
@@ -69,17 +94,27 @@ router.post('/login', (req,res) => {
 
     Restaurant.findOne({email}).then(restaurant => {
         if(!restaurant) {
+            // if account doesn't exist show error
+
             return res.status(400).json({ emailnotfound: 'Email not found' });
         } else if(!restaurant.verified) {
+            // if account exists but not verified
+            // tells them to verify their account
+
             return res.status(400).json({ email: 'Account not verified. Confirm email' })
         }
 
         bcrypt.compare(password, restaurant.password).then(isMatch => {
+            // compares input password with encrypted password
+            // and lets in only if it matches
+
             if(isMatch) {
                 const payload = {
                     id: restaurant.id,
                     type: 'restaurant'
                 };
+
+                // generates JWT token which will be valid for 1 year
 
                 jwt.sign(
                     payload,
@@ -95,11 +130,15 @@ router.post('/login', (req,res) => {
                     }
                 );
             } else {
+                // if password incorrect sends error
+
                 return res.status(400).json({ passwordincorrect: 'Password incorrect' });
             }
         });
     });
 });
+
+// upon confirmation of mail
 
 router.get('/confirm/:id', (req,res) => {
     const { id } = req.params;
@@ -108,18 +147,29 @@ router.get('/confirm/:id', (req,res) => {
     Restaurant.findById(id)
         .then(restaurant => {
             if(!restaurant) {
+                // if restaurant not valid shows error
+
                 res.json({ msg: msgs.couldNotFind });
             }
             else if(restaurant && !restaurant.verified) {
+                // if restaurant valid & not verified previously
+                // successfully verifies the account
+
                 Restaurant.findByIdAndUpdate(id, {verified: true})
                     .then(() => res.json({ msg: msgs.confirmed }))
                     .catch(err => console.log(err))
             }
             else {
+                // if already verified shows message
+
                 res.json({ msg: msgs.alreadyConfirmed });
             }
         })
 })
+
+// protected route to get data from restaurant
+// password not included
+// access granted only if restaurant logged in
 
 router.get('/accountinfo', VerifyToken, (req,res) => {
     const account = req.account;
@@ -134,6 +184,9 @@ router.get('/accountinfo', VerifyToken, (req,res) => {
             }
         })
 })
+
+// protected API to add food item
+// access denied if restaurant not logged in
 
 router.post('/add_item', VerifyToken, (req,res) => {
     const account = req.account;
@@ -169,6 +222,9 @@ router.post('/add_item', VerifyToken, (req,res) => {
             }
         })
 })
+
+// gets all restaurant and their fooditems
+// excludes password
 
 router.get('/restaurantlist', (req,res) => {
     Restaurant.find({}, '-password', (err,restaurants) => {

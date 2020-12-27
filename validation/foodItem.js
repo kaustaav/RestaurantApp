@@ -1,6 +1,8 @@
 const Validator = require('validator');
 const isEmpty = require('is-empty');
 
+// check validity of input food items and corresponding datas
+
 module.exports = function validateFoodItem(data) {
     let errors = {};
 

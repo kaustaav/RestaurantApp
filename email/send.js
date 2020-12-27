@@ -1,3 +1,5 @@
+// action to send mail upon API confirmation
+
 const nodemailer = require('nodemailer');
 const keys = require('../config/keys');
 

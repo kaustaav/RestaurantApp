@@ -1,6 +1,8 @@
 const Validator = require('validator');
 const isEmpty = require('is-empty');
 
+// check validity of user/restaurant login input fields 
+
 module.exports = function validateLoginInput(data) {
     let errors = {};
 

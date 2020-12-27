@@ -1,6 +1,8 @@
 const Validator = require('validator');
 const isEmpty = require('is-empty');
 
+// checks validity of forget password input fields. Though this feature is not integrated yet
+
 module.exports = function validateForgetPasswordInput(data) {
     let errors = {};
 

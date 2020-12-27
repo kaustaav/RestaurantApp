@@ -1,3 +1,5 @@
+// messages returned from mail actions
+
 module.exports = {
     confirm: 'Email sent, please check your inbox to confirm',
     confirmed: 'Your email is confirmed',
